@@ -15,6 +15,7 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
     public String generateToken(User user) {
+        // The token will be generated using the username and the secret
         try {
             // This is the secret key that will be used to sign the token
             // The same key is used both to generate and validate the signature
@@ -29,6 +30,21 @@ public class TokenService {
                     .sign(algorithm);
         } catch (Exception e) {
             throw new RuntimeException("Error generating token");
+        }
+    }
+
+    public String getSubject(String token) {
+        // This method will be used to get the subject from the token (the username)
+        // The token is signed, so we can validate the signature using the same secret key
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
+                    .withIssuer("auth-api")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (Exception e) {
+            throw new RuntimeException("Error validating token");
         }
     }
 }
