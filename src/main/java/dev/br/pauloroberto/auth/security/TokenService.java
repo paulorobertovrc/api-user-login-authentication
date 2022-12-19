@@ -2,6 +2,7 @@ package dev.br.pauloroberto.auth.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import dev.br.pauloroberto.auth.domain.user.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,13 +39,28 @@ public class TokenService {
         // The token is signed, so we can validate the signature using the same secret key
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
+
             return JWT.require(algorithm)
                     .withIssuer("auth-api")
                     .build()
                     .verify(token)
                     .getSubject();
-        } catch (Exception e) {
+        } catch (JWTVerificationException e) {
             throw new RuntimeException("Error validating token");
+        }
+    }
+
+    public boolean isValid(String token) {
+        // This method will be used to validate the token
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            JWT.require(algorithm)
+                    .withIssuer("auth-api")
+                    .build()
+                    .verify(token);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }
