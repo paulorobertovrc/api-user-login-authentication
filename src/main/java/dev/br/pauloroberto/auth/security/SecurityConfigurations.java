@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfigurations {
 
     private final Filter securityFilter;
@@ -34,6 +36,7 @@ public class SecurityConfigurations {
                 .and().authorizeHttpRequests()
                 // Defines which endpoints are public
                 .requestMatchers(HttpMethod.POST, ("/login")).permitAll()
+                .requestMatchers(HttpMethod.GET, ("/home")).permitAll()
                 // Defines which endpoints are private
                 .anyRequest().authenticated()
                 // This filter will be executed before the default filter
