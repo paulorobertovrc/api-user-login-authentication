@@ -29,11 +29,10 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(request);
-        String subject;
 
         if (tokenService.isValid(token)) {
             // If token is valid, gets subject from token
-            subject = tokenService.getSubject(token);
+            String subject = tokenService.getSubject(token);
             // Gets user from database
             Optional<UserDetails> user = userRepository.findByUsername(subject);
 
