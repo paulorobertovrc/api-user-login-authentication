@@ -1,20 +1,17 @@
 package dev.br.pauloroberto.auth.domain.user;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
 
 @Table(name = "users")
 @Entity(name = "User")
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public abstract class User implements UserDetails {
 
@@ -24,6 +21,16 @@ public abstract class User implements UserDetails {
     private String username;
     private String password;
     private String roles;
+
+    public User() {
+    }
+
+    public User(Long id, String username, String password, String roles) {
+        this.id = id;
+        this.username = username;
+        this.password = new BCryptPasswordEncoder().encode(password);
+        this.roles = roles;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -60,17 +67,9 @@ public abstract class User implements UserDetails {
         return true;
     }
 
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
-
     @Override
     public String toString() {
-        return "User{" +
+        return "User {" +
                     "id=" + id +
                     ", username='" + username + '\'' +
                     ", password='" + password + '\'' +
