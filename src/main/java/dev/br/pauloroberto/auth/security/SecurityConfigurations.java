@@ -31,7 +31,7 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // Disables CSRF (Cross-Site Request Forgery) protection because we are using jwt
         return http.csrf().disable()
-                // Defines session management as stateless
+                // Defines session management as stateless)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
                 // Defines which endpoints are public
@@ -50,18 +50,9 @@ public class SecurityConfigurations {
         return conf.getAuthenticationManager();
     }
 
+    // This bean is needed to be able to inject PasswordEncoder in UserDetailsService
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder() {
-            @Override
-            public String encode(CharSequence charSequence) {
-                return charSequence.toString();
-            }
-
-            @Override
-            public boolean matches(CharSequence charSequence, String s) {
-                return charSequence.toString().equals(s);
-            }
-        };
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
