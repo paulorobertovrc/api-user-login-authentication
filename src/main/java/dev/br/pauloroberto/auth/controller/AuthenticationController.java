@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,16 +28,22 @@ public class AuthenticationController {
 
     @PostMapping
     public ResponseEntity<?> authenticate(@RequestBody @Valid AuthenticationDto authData) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+        UsernamePasswordAuthenticationToken loginData = new UsernamePasswordAuthenticationToken(
                 authData.username(),
                 authData.password()
         );
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-        // This is the user that was authenticated
-        // getPrincipal() returns the user object that was authenticated
-        String token = tokenService.generateToken((User) authentication.getPrincipal());
+        try {
+            Authentication authentication = authenticationManager.authenticate(loginData);
 
-        return ResponseEntity.ok(new TokenDto(token));
+            // This is the user that was authenticated
+            // and getPrincipal() returns the user object that was authenticated
+            String token = tokenService.generateToken((User) authentication.getPrincipal());
+
+            return ResponseEntity.ok(new TokenDto(token));
+
+        } catch (AuthenticationException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
