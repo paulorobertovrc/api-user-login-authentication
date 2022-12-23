@@ -107,3 +107,18 @@ To test access to routes, it is necessary to use an HTTP client (such as Postman
 Access to the public endpoint `/home` can be done without authentication through a `GET` type request.
 To test the authentication, it is necessary to send a `POST` request to the `/login` endpoint containing the `username` and `password` fields in the request body in Json format. If authentication is successful, the JWT token will be returned in the `Authorization` field of the response header.
 Then, to access the private endpoints, just send a `GET` request to the desired endpoint (`/home/user` or `/home/admin`), containing the JWT token in the `Authorization` field of the header of the request. Please note that regular users will only have access to the first endpoint, while administrators will be able to access both.
+
+----------
+
+Endpoint: `/home`
+<img width="1203" alt="Captura de Tela 2022-12-23 às 10 12 43" src="https://user-images.githubusercontent.com/70707151/209350496-485c48be-0925-49fc-82bb-d945b5771926.png">
+Endpoint: `/login` | Account: User
+<img width="1203" alt="Captura de Tela 2022-12-23 às 10 13 10" src="https://user-images.githubusercontent.com/70707151/209350655-0e90d7e5-2888-49e2-83ce-7438bc466384.png">
+Endpoint: `/home/user` | Account: User
+<img width="1203" alt="Captura de Tela 2022-12-23 às 10 14 29" src="https://user-images.githubusercontent.com/70707151/209350840-18899075-a78b-46ea-a6ae-327c8af20233.png">
+Endpoint: `/home/admin` | Account: User
+<img width="1203" alt="Captura de Tela 2022-12-23 às 10 14 44" src="https://user-images.githubusercontent.com/70707151/209350934-aefc4b48-aab3-4886-bb2c-78f30fb5ac93.png">
+Endpoint: `/login` | Account: Admin
+<img width="1203" alt="Captura de Tela 2022-12-23 às 10 14 55" src="https://user-images.githubusercontent.com/70707151/209351149-bf390976-1bab-47e8-b613-6d73b4a76728.png">
+Endpoint: `/home/admin` | Account: Admin
+<img width="1203" alt="Captura de Tela 2022-12-23 às 10 15 36" src="https://user-images.githubusercontent.com/70707151/209351000-d3b60161-8433-44d5-9136-5b2a7404000c.png">
